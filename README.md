@@ -1,81 +1,50 @@
-# Minecraft BedrockEdition Server Motd
+# Minecraft Server Motd for PHP
 我的世界服务器Motd协议封装和HTTP API实践
 
-虽然叫"BedrockEdition Server Motd"，但是也支持Java Server哦 : )
+_尚未支持Java版_
 
-## 🛫 使用
-### 官方部署站点
-[https://motdbe.blackbe.work/](https://motdbe.blackbe.work/)
-### API 文档
-[BlackBE Wiki](https://wiki.blackbe.work/OpenAPI/tools.html#get-https-motdbe-blackbe-xyz-api-%E8%8E%B7%E5%8F%96%E5%9F%BA%E5%B2%A9%E7%89%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%8A%B6%E6%80%81)
-
-## 🛠️ 部署
-``` shell
-#解压资源
-unzip MCBE-Server-Motd_{{VERSION_OS_ARCH}}.zip
-
-#赋予运行权限
-chmod +x ./MCBE-Server-Motd
-
-#启动
-./MCBE-Server-Motd -port 8080
-```
-
-## ⚙️ 构建
-自行构建前需要拥有 Go >= 1.22，yarn等必要依赖
-
-克隆仓库
-``` shell
-git clone https://github.com/BlackBEDevelopment/MCBE-Server-Motd.git --recurse-submodules
-```
-
-构建静态资源
-``` shell
-#进入前端目录
-cd ./fronend
-
-#安装依赖
-yarn install
-
-#开始构建
-yarn build
-```
-
-编译项目
-``` shell
-#获取依赖包
-go mod tidy
-
-#开始编译
-go build .
-```
-
-## 🎬 引入项目
-### 安装
-``` shell
-go get -u github.com/BlackBEDevelopment/MCBE-Server-Motd/MotdBEAPI
-```
-
-### 例子
-``` go
-package main
-
-import (
-	"fmt"
-
-	"github.com/BlackBEDevelopment/MCBE-Server-Motd/MotdBEAPI"
-)
-
-func main() {
-	Host := "nyan.xyz:19132"
-	data, err := MotdBEAPI.MotdBE(Host)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(data)
+## 🎬用法
+请求地址: `/api/be.php`  
+请求方式: `POST或GET`  
+请求内容: `ip`  
+端口不输入则默认是19132  
+示例:  
+`http://localhost:8003/api/be.php?ip=ntest.easecation.net:19132`  
+返回  
+1. 输入错误  
+``` json
+{
+  "status": 400,
+  "online": false,
+  "message": "IP或端口输入无效"
 }
 ```
-
+2. 服务器离线  
+``` json
+{
+  "status": 204,
+  "online": false,
+  "message": "服务器离线"
+}
+```
+3. 服务器在线  
+``` json
+{
+  "status": 200,
+  "online": true,
+  "host": "ntest.easecation.net",
+  "ip": "42.186.64.243",
+  "motd": "§l§aEase§6Cation§r§3 §r§7§kEC§r §l§cMURDER MYSTERY§r §7§kEC§r",
+  "agreement": 503,
+  "version": "1.18.30",
+  "onlines": 4,
+  "max": 5000,
+  "level": "Powered by Nemisys",
+  "gamemode": "Survival",
+  "id": "275128025514481402",
+  "delay": 58.177001953125
+}
+```
 ## 📖许可证
 项目采用`Mozilla Public License Version 2.0`协议开源
 
